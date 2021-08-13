@@ -1,0 +1,104 @@
+@model models.Models.Art
+
+
+<div class="singleImg">
+    <button type="button" class="close mr-0" data-dismiss="modal" aria-hidden="true">x</button>
+    <section class="singleInfo">
+        <b>@Model.Title</b> by <a href="OProfile/@Model.CreatorId" class="light ahov">@Model.Creator.DisplayName</a><br>
+        <a href="IntoBag/@Model.ArtId" class="light ahov"><button class="purchase">Add to Bag</button></a>
+    </section>
+    <div class="sngl_flex">
+        <img class="sngl_img" src="~/images/@Model.ImgFile" />
+        <div class="sngl_tags">
+            <h5 class="text-center mt-3 mb-2">Tags</h5>
+            @foreach( var tag in Model.Tags){
+                <p class="viewTag ml-2 text-dark font-weight-bold">@tag.Desc</p>
+            }
+        </div>
+    </div>
+    <section class="singleBtns">
+        @if (@ViewBag.LoggedUser == null)
+        {
+            <a class="mr-3 highlight" href="Login">
+                <i class="material-icons">favorite_border</i>
+            </a>
+        }
+        else if (Model.LikedBy.Any(a => a.UserId == ViewBag.LoggedUser))
+        {
+            <button class="btnlike mr-3" data-id="@Model.ArtId" data-like="yes">
+                <span class="highlight">
+                    <i class="material-icons">favorite</i>
+                </span>
+            </button>
+        }
+        else
+        {
+            <button class="btnlike mr-3" data-id="@Model.ArtId" data-like="no">
+                <i class="material-icons">favorite_border</i>
+            </button>
+        }
+        | @if (ViewBag.User == null)
+        {
+            <a href="/FavoriteArtist/@Model.Creator.UserId">
+                <button type="submit" class="ml-3 roundBorder p-1">Follow</button> </a>
+        }
+        else
+        {
+            <a href="/FavoriteArtist/@Model.Creator.UserId">
+                <button class="open roundBorder ml-3 p-1" type="submit">Following</button>
+            </a>
+        }
+    </section>
+    <div id="commentplace" class="comments">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="cmnt">
+                <a href="/OProfile/@comment.UserId">@comment.User.DisplayName</a>
+                <p>@comment.Message</p>
+            </div>
+        }
+    </div>
+    @if (ViewBag.LoggedUser != null)
+    {
+        <form id="commentForm">
+            <input type="hidden" name="ArtId" value="@Model.ArtId">
+            <textarea name="Message"></textarea>
+            <button id="btnsubmit">Post</button>
+        </form>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $("#btnsubmit").click(function (e) {
+            //Serialize the form datas.  
+            e.preventDefault();
+            $.post("WriteComment", $("#commentForm").serialize(), function (data) {
+                console.log(data);
+                $("#commentplace").append("<div class='cmnt'><a href='/OProfile/" + data.userId + "'>@if (ViewBag.User != null){@ViewBag.User.DisplayName}</a > <p>" + data.message + "</p></div > ");
+            },
+                "json"
+            );
+            $.get("Details", { "id": @Model.ArtId }, function (data) {
+                $('#myModalContent').html(data);
+                $('#myModal').modal({ "backdrop": "static", keyboard: true });
+                $('#myModal').modal('show');
+            });
+        });
+        $(".btnlike").click(function () {
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            if ($buttonClicked.attr('data-like') == "yes") {
+                $.get("LikeArt", { "id": id }, function () {
+                    $buttonClicked.html("<i class='material-icons'>favorite_border</i>");
+                    $buttonClicked.attr({ "data-like": "no" });
+                });
+            }
+            else if ($buttonClicked.attr('data-like') == "no") {
+                $.get("LikeArt", { "id": id }, function () {
+                    $buttonClicked.html("<span class='highlight'><i class='material-icons'>favorite</i></span>");
+                    $buttonClicked.attr({ "data-like": "yes" });
+                });
+            }
+        });
+    });
+</script>

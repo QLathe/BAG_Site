@@ -1,0 +1,92 @@
+@model models.ViewModels.ArtViewModel;
+@{
+    ViewData["Title"] = "Upload Page";
+}
+<div class="container-fluid ">
+    <div class="row justify-content-center">
+        <form id="uploadForm" class="col-4" asp-action="addArt" asp-controller="Profile" enctype="multipart/form-data">
+            <input type="hidden" id="tags" name="tags" value=""/>
+            <h3><a class="icon" href="/Profile">
+                    <i class="material-icons">
+                        arrow_back
+                    </i>
+                </a>
+                Upload Art</h3>
+            <div class="row mt-4 align-items-end">
+                <div class="background col border border-dark p-3 roundBorder">
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Title"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Title"></span>
+                            <input class="form-control" asp-for="Title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Genre"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Genre"></span>
+                            <select class="form-control" asp-for="Genre">
+                                @foreach (var genre in ViewBag.Categories)
+                                {
+                                    <option value="@genre">@genre</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Price"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Price"></span>
+                            <input class="form-control" asp-for="Price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label">Tags</label>
+                        <div id="writeTag"></div>
+                        <div class="col-12">
+                            <input class="form-control" type="text" id="tagInput">
+                            <button id="tagSubmit">add tag</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Image"></label>
+                        <div class="col-12">
+                            <img id="output" class="img__img" src="#" alt=" " />
+                            <span asp-validation-for="Image"></span>
+                            <input asp-for="Image" onchange="loadFile(event)">
+                        </div>
+                    </div>
+                    <button class="row ml-auto mr-3 mt-3" type="submit">Upload Art</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section scripts
+{
+
+<script>
+    var loadFile = function (event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('output');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+    $(document).ready(function () {
+        $("#tagSubmit").click(function (e) {
+            //Serialize the form datas.
+            e.preventDefault();  
+            var test = document.getElementById('tagInput').value;
+            var newval = $("#tags").attr('value') +","+ test;
+            $("#tags").value = newval;
+            document.getElementById('tagInput').value = null;
+            console.log(newval);
+            $("#writeTag").append("<p class='uploadTag'>"+ test +"</p>");
+            $("input[name=tags]").val(newval);
+        })
+    })
+</script>
+
+}

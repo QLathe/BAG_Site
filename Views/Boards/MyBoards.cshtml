@@ -1,0 +1,35 @@
+@model List<models.Models.Board>
+
+@{
+    ViewData["Title"] = "My Boards";
+}
+
+<h4 class="text-center text-uppercase mt-3">My Boards</h4>
+<div class="index-scroll">
+    <table class="mt-3">
+        <tbody>
+            <tr><a href="NewBoard"><button>New Board</button></a></tr>
+            <tr>
+                @foreach (var board in Model)
+                {
+                    <th class="text-center">
+                        <a href="ViewBoard/@board.BoardId">
+                            <h4>@board.Title</h4>
+                        </a>
+                    </th>
+                }
+            </tr>
+            <tr>
+                @foreach (var board in Model)
+                {
+                    <td>
+                        <a href="ViewBoard/@board.BoardId">
+                        @if(board.Pinned.Count > 0){
+                            <img src="/images/@board.Pinned[0].Art.ImgFile">
+                        }
+                        </a>
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>

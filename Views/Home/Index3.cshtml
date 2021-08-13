@@ -1,0 +1,160 @@
+﻿@model List<models.Models.Art>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Slideshow container -->
+@{
+    var counter = -1;}
+<div class="slideshow-container">
+    @foreach (var art in @ViewBag.feature)
+    {
+        <div class="mySlides">
+            <span class="helper"></span>
+            <img src="/images/@art.ImgFile" class="featImg">
+            <span></span>
+            <div class="text">@art.Title by: <a href="OProfile/@art.Creator.UserId" class="highlight darkHover"> @art.Creator.DisplayName</a></div>
+        </div>
+    }
+    <!-- Next and previous buttons -->
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+</div>
+<h3 class="ml-3">Explore Genres </h3>
+<div id="Main_Genre">
+
+    @* @foreach (var art in @ViewBag.feature)
+        {
+        <div class="img__block pane">
+        <div class="img__wrap">
+        <img class="img__img" src="/images/@art.ImgFile" height="100" width="100" />
+        @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;"
+        <div class="genre__description anchorDetail" data-id="@art.ArtId">
+        <p class="genre">Something</p>
+        </div>
+        </div>
+        </div>
+        } *@
+
+    @foreach (var genre in @ViewBag.Categories)
+    {
+        <div class="img__block pane">
+            <a href="/Genres/@genre">
+                <div class="img__wrap">
+                    @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;" *@
+                    @{
+                        var link = "/images/" + @genre + ".jpg";}
+                    <img class="img__img" src="@link" height="100" width="100" />
+                    <div class="genre__description">
+                        <p class="genre">@genre</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+    @foreach (var genre in @ViewBag.Categories)
+    {
+        <div class="img__block pane">
+            <a href="/Genres/@genre">
+                <div class="img__wrap">
+                    @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;" *@
+                    @{
+                        var link = "/images/" + @genre + ".jpg";}
+                    <img class="img__img" src="@link" height="100" width="100" />
+                    <div class="genre__description">
+                        <p class="genre">@genre</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+<div class="index-scroll mt-5">
+
+    @foreach (var art in Model)
+    {
+        counter += 1;
+        <div class="img__block">
+            <div class="img__wrap">
+                <img class="img__img lazy" data-src="/images/@art.ImgFile" height="100" width="100" />
+                @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;" *@
+                <div href="javascript:void(0);" class="img__description anchorDetail" data-id="@art.ArtId">
+                    <p class="creator">@art.Creator.DisplayName</p>
+                    <p class="artTitle">@art.Title</p>
+                    <div class="likeIco">
+                        <p class="nom">@art.LikedBy.Count</p>
+                        @if (art.LikedBy.Any(a => a.User == ViewBag.User))
+                        {
+                            <a class="likes" data-id="@art.ArtId" data-like="yes">
+                                <span class="highlight">
+                                    <i class="material-icons">favorite</i>
+                                </span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="likes" data-id="@art.ArtId" data-like="no">
+                                <i class="material-icons">favorite_border</i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    window.setInterval(function(){
+  /// call your function here
+    plusSlides(1)
+}, 10000);
+
+    @* $('#Main_Genre').scroll(function () {
+            var length = document.getElementById('Main_Genre').scrollWidth - document.getElementById('Main_Genre').clientWidth;;
+            var scrolled = $('#Main_Genre').scrollLeft();
+            if (scrolled >= length / 3) {
+            document.getElementById('Main_Genre').scrollTo(0, 0);
+            }
+            console.log(scrolled);
+            console.log(length);
+            }); *@
+    $(function () {
+    var TeamDetailPostBackURL = 'Details';
+        $(".anchorDetail").click(function () {
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.get(TeamDetailPostBackURL, { "id": id }, function (data) {
+                $('#myModalContent').html(data);
+                $('#myModal').modal(options);
+                $('#myModal').modal('show');
+            });
+        });
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+}

@@ -1,0 +1,75 @@
+@model List<models.Models.Art>
+
+@{
+    ViewData["Title"] = "My Feed";
+}
+
+<div class="scroll">
+    <ul>
+        @foreach (var art in Model)
+        {
+            <li class="feed_list">
+                <div class="flex pt-2 pb-2">
+                    <section>
+                    @if (art.Creator.ProfilePic == null)
+                    {
+                        <img src="~/images/Default_Profile_Pic.png" alt="" class="Profile-Pic-feed">
+                    }
+                    else
+                    {
+                        <img src="~/images/@art.Creator.ProfilePic" alt="" class="Profile-Pic-feed">
+                    }
+                    <a href="OProfile/@art.CreatorId"
+                        class="highlight darkHover text__pop">@art.Creator.DisplayName</a>
+                    </section>
+                        <div style="margin-left:auto;margin-right:auto;"><h4><a href="OProfile/@art.CreatorId" class="highlight darkHover text__pop"><b>@art.Title</b></a></h4></div>
+                    <a href="IntoBag/@art.ArtId" class="light ahov mr-3"><button class="purchase">Add to Bag</button></a>
+                </div>
+                    <div class="sngl_flex">
+                        <img class="sngl_img" src="~/images/@art.ImgFile" />
+                        <div class="sngl_tags">
+                            <h5 class="text-center mt-3 mb-2">Tags</h5>
+                            @foreach (var tag in art.Tags)
+                            {
+                                <p class="viewTag ml-2 text-dark font-weight-bold">@tag.Desc</p>
+                            }
+                        </div>
+                    </div>
+                    <section class="singleBtns">
+                        @if (art.LikedBy.Any(a => a.UserId == ViewBag.LoggedUser))
+                        {
+                            <button class="btnlike mr-3" data-id="@art.ArtId" data-like="yes">
+                                <span class="highlight">
+                                    <i class="material-icons">favorite</i>
+                                </span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btnlike mr-3" data-id="@art.ArtId" data-like="no">
+                                <i class="material-icons">favorite_border</i>
+                            </button>
+                        }
+                    </section>
+                    <div id="commentplace" class="comments">
+                        @foreach (var comment in art.Comments)
+                        {
+                            <div class="cmnt">
+                                <a href="/OProfile/@comment.UserId">@comment.User.DisplayName</a>
+                                <p>@comment.Message</p>
+                            </div>
+                        }
+                    </div>
+
+            </li>
+        }
+    </ul>
+</div>
+@section scripts{
+<script>
+    $('body').css({
+        overflow: 'hidden',
+        height: '100%'
+    });
+</script>
+}

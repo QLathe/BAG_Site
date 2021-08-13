@@ -1,0 +1,71 @@
+@model User
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="profcol1">
+    <div class="profcontainer">
+        @if (ViewBag.User.ProfilePic == null)
+        {
+            <div class="img__wrap Profile-Pic">
+                <img src="~/images/Default_Profile_Pic.png" alt="" class="Profile-Pic">
+                <a asp-action="UploadPro" asp-controller="Profile" class="img__description Profile-Pic">+</a>
+            </div>
+        }
+        else
+        {
+            <div class="img__wrap Profile-Pic">
+                <img src="~/images/@ViewBag.User.ProfilePic" alt="" class="Profile-Pic">
+                <a asp-action="UploadPro" asp-controller="Profile" class="img__description Profile-Pic">+</a>
+            </div>
+        }
+        <div class="stat">
+            @if (ViewBag.User.Mentor == 1)
+            {
+                <p>Available to Mentor</p>
+            }
+            else if (ViewBag.User.Mentor == 2)
+            {
+                <p>Open to be Mentored</p>
+            }
+            @if (ViewBag.User.OpenForCommission == 1)
+            {
+                <p>Available for Commissions</p>
+            }
+            <a href="Profile">Profile</a>
+        </div>
+    </div>
+</div>
+<div class="profcol2">
+    <h2 class="text-center">@ViewBag.User.DisplayName</h2>
+    @foreach (var art in ViewBag.UserArt)
+    {
+        <ul class="displayArt">
+            @art.Title
+            <div class="img__wrap">
+                <img class="img__img" src="~/images/@art.ImgFile" height="100" width="100" />
+                <div class="info">
+                    <p class="img__description">@art.Creator.DisplayName</p>
+                    <p class="img__description">@art.Title</p>
+                    <p class="img__description">@art.LikedBy</p>
+                </div>
+            </div>
+        </ul>
+    }
+</div>
+<div class="profcol3">
+    <section class="profcontainer2">
+
+    <div class="bio">
+        <div class="border p-5">
+            <form asp-action="writeBio" asp-controller="Profile" method="POST">
+                <textarea asp-for="Bio">@ViewBag.User.Bio</textarea>
+                <button type="submit">Enter</button>
+            </form>
+        </div>
+    </div>
+    <div class="info">
+        <p>Rest of the info</p>
+    </div>
+    </section>
+</div>

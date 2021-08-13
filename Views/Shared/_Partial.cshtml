@@ -1,0 +1,31 @@
+@model models.Models.Art
+
+
+
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="singleImg">
+    <section class="singleInfo">
+        <b>@Model.Title</b> by <a href="Profile/@Model.CreatorId" class="text-light">@Model.Creator.DisplayName</a>
+    </section>
+    <img class="img__img" src="~/images/@Model.ImgFile" height="100" width="100" />
+    <section class="singleBtns">
+        <form asp-controller="Profile" asp-action="FavoriteArtist"><input type="hidden" value="@Model.ArtId">
+        <a class="likes mr-3" href="LikeArt/@Model.ArtId">
+            @if (Model.LikedBy.Any(a => a.UserId == ViewBag.LoggedUser))
+            {
+                <span class="highlight">
+                    <i class="material-icons">favorite</i>
+                </span>
+            }
+            else
+            {
+                <i class="material-icons">favorite_border</i>
+            }
+        </a>|<button type="submit" class="ml-3">Favor</button></form>
+    </section>
+</div>
+@foreach (var comment in Model.Comments)
+{
+    <p>@comment.Message</p>
+}
+    <form id="commentForm"><input type="hidden" name="ArtId" value="@Model.ArtId"><textarea name="Message"></textarea><button id="btnsubmit">Post</button></form>

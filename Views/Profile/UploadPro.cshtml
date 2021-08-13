@@ -1,0 +1,10 @@
+@model models.ViewModels.ProfileViewModel;
+@{
+    ViewData["Title"] = "Upload Page";
+}
+
+<form asp-action="addPic" enctype="multipart/form-data">
+    <label asp-for="Image"></label>
+    <input asp-for="Image"/>
+    <input type="submit"/>
+</form>

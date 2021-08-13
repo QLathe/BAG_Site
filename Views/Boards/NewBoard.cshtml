@@ -1,0 +1,40 @@
+@model models.Models.Board
+
+@{
+    ViewData["Title"] = "Login Page";
+}
+
+<div class="container-fluid ">
+    <div class="row justify-content-center">
+        <form class="col-4" asp-action="createBoard" asp-controller="Boards" method="POST">
+            <h3>New Board</h3>
+                <div class="row mt-4 align-items-end">
+                    <div class="background col border border-dark p-3 roundBorder">
+                        <div class="form-group">
+                            <label class="col-sm-4 col-form-label" asp-for="Title"></label>
+                            <div class="col-sm-7">
+                                <span asp-validation-for="Title"></span>
+                                <input class="form-control" asp-for="Title">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-form-label" asp-for="Description"></label>
+                                <span asp-validation-for="Description"></span>
+                                <input class="form-control" asp-for="Description">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-form-label" asp-for="Viewable"></label>
+                                <span asp-validation-for="Viewable"></span>
+                                <select class="form-control" asp-for="Viewable">
+                                    <option value="0">Private</option>
+                                    <option value="1">Followers can view</option>
+                                    <option value="2">Public</option>
+                                </select>
+                        </div>
+                        <button class="row ml-auto mr-3" type="submit">Create Board</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BAG_Site</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="shortcut icon" type="image/ico" href="~/images/favicon.ico">
+</head>
+
+<body>
+    <header>
+        @* Header that shows up on every page *@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm ">
+            <a class="mlogo" href="/">
+                <img src="~/images/BAG_LOGO.png">
+            </a>
+            <form class="search" action="/Search" method="POST">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><span class="material-icons">
+                        search
+                    </span></button>
+            </form>
+            <a href="/bag"><span class="material-icons md-48 highlight mr-3">
+                    shopping_bag</span>
+                </span></a>
+            @* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button> *@
+
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn">
+                    <div class="menu"></div>
+                    <div class="menu"></div>
+                    <div class="menu"></div>
+                </button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a class="border" href="/">Home</a>
+                    @{
+                        if (@ViewBag.LoggedUser == null)
+                        {
+                            <a class="border" href="/Login">Login</a>
+                            <a class="border" href="/Register">Sign-up</a>
+                        }
+                        else
+                        {
+                            <a class="border" href="/Profile">Profile</a>
+                            <a class="border" href="/Liked">Liked Art</a>
+                            <a class="border" href="/MyBoards">My Boards</a>
+                            <a class="border" href="/Feed">My Feed</a>
+                            <a class="border" href="/Logout">Log-out</a>
+                        }
+                    }
+                    <a class="border" href="/Privacy">Privacy</a>
+                </div>
+
+            </div>
+        </nav>
+        <div class="btn_bar">
+            <a class="btn_link" href="/Genres">
+                <button class="btn_btn">Genres</button>
+            </a>
+            @{
+                if (@ViewBag.LoggedUser == null)
+                {
+                    <a class="btn_link" href="/">
+                        <button class="btn_btn">Home</button>
+                    </a>
+                }
+                else
+                {
+                    <a class="btn_link" href="/Feed">
+                        <button class="btn_btn">Home</button>
+                    </a>
+                }
+            }
+            <a class="btn_link" href="/Artists">
+                <button class="btn_btn">Artists</button>
+            </a>
+        </div>
+    </header>
+    <div class="main-contain">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @* <footer class="border-top footer text-muted">
+        <div class="container">
+        &copy; 2021 - BAG_Site - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+        </footer> *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+@model IEnumerable<models.Models.Job>
+
+@{
+    ViewData["Title"] = "Contracts";
+}
+
+<div class="index-scroll">
+    <div class="jobTabs">
+        <a href="/JobView" class="highlight mt-3 currentTab">Current Jobs</a>
+        <a href="/pastJobs" class="highlight mt-3 tab">Past Jobs</a>
+    </div>
+    <table id="jobViewTable" class="container-fluid background roundBorder">
+        <thead class="text-center pt-3">
+            <tr class="noBorder">
+                <th class="title">
+                    Title
+                </th>
+                <th class="description">
+                    Description
+                </th>
+                <th>
+                    Company
+                </th>
+                <th class="action">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                @if (job.Status == 0)
+                {
+                    <tr>
+                        <td class="pl-3">
+                            <h6>
+                                <a class="highlight" href="">@job.Title</a>
+                            </h6>
+                        </td>
+                        <td>
+                            <p class="no_overflow">@job.Description</p>
+                        </td>
+                        <td>
+                            <p class="no_overflow text-center">@job.Company</p>
+                        </td>
+                        <td class="flex">
+                            <a href="/ViewJob/@job.JobId" class="ml-auto mr-auto highlight darkHover">View</a>
+                            |
+                            <a href="/JobReject/@job.JobId" class="ml-auto mr-auto highlight darkHover">Decline</a>
+                        </td>
+                    </tr>
+                }
+                @if (job.Status == 1)
+                {
+                    <tr>
+                        <td class="pl-3">
+                            <h4>
+                                <a class="highlight" href="">@job.Title</a>
+                            </h4>
+                        </td>
+                        <td class="no_overflow">
+                            @job.Description
+                        </td>
+                        <td>
+                            @job.Company
+                        </td>
+                        <td class="sngl_flex">
+                            <a href="/ViewJob/@job.JobId" class="ml-auto mr-auto highlight darkHover">View</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>

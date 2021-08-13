@@ -1,0 +1,74 @@
+@model List<models.Models.Art>
+
+@{
+    ViewData["Title"] = @Model[0].Genre+" Page";
+}
+
+<h4 class="text-center text-uppercase mt-3">@Model[0].Genre</h4>
+<div class="index-scroll mt-5">
+    @foreach (var art in Model)
+    {
+        <div class="img__block">
+            <div class="img__wrap">
+                    <img class="img__img" src="/images/@art.ImgFile" height="100" width="100" />
+                @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;" *@
+                <div href="javascript:void(0);" class="img__description anchorDetail" data-id="@art.ArtId">
+                    <p class="creator">@art.Creator.DisplayName</p>
+                    <p class="artTitle">@art.Title</p>
+                    <div class="likeIco">
+                        <p class="nom">@art.LikedBy.Count</p>
+                        @if (art.LikedBy.Any(a => a.User == ViewBag.User))
+                        {
+                            <a class="likes" data-id="@art.ArtId" data-like="yes">
+                                <span class="highlight">
+                                    <i class="material-icons">favorite</i>
+                                </span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="likes" data-id="@art.ArtId" data-like="no">
+                                <i class="material-icons">favorite_border</i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script>
+        var TeamDetailPostBackURL = '/Details';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.get(TeamDetailPostBackURL, { "id": id }, function (data) {
+                $('#myModalContent').html(data);
+                $('#myModal').modal(options);
+                $('#myModal').modal('show');
+            });
+        });
+        //$("#closebtn").on('click',function(){  
+        //    $('#myModal').modal('hide');    
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+
+    });
+</script>
+
+}

@@ -1,0 +1,97 @@
+@model models.Models.Bag
+
+@{
+  ViewData["Title"] = "Bag Page";
+}
+<head>
+  @* <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script> *@
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<h3 class="text-center text-uppercase mt-3">Your Bag</h3>
+<table class="bag-table">
+  <thead>
+    <th class="tbl1 bag-none"></th>
+    <th class="tbl2">Image</th>
+    <th class="tbl3">Title</th>
+    <th class="tbl4">Price</th>
+  </thead>
+  <tbody>
+    @foreach (var bagitem in Model.Art)
+    {
+      <tr>
+        <td class="bag-none"><a href="OutBag/@bagitem.ArtId"><button class="redx">X</button></a></td>
+        <td class="bag-show">
+          <div class="product-image">
+            <img class="bag__img" src="/images/@bagitem.Art.ImgFile">
+          </div>
+        </td>
+        <td class="bag-show">
+          <p>Title: @bagitem.Art.Title</p>
+          <p>Artist: @bagitem.Art.Creator.DisplayName</p>
+        </td>
+        <td class="bag-show text-right">
+          $ @String.Format("{0:#,##0.00}",  Decimal.Divide(@bagitem.Art.price_data,100))</td>
+      </tr>
+    }
+  </tbody>
+</table>
+<div class="bag-table">
+
+<table class="ml-auto bag-footer">
+  <tr>
+    <td class="bag-show text-right"><label>Subtotal</label>
+    </td>
+    <td class="bag-show">
+      <div class="totals-value" id="cart-subtotal">$ @String.Format("{0:#,##0.00}",  Decimal.Divide(@ViewBag.total,100))</div>
+    </td>
+  </tr>
+  <tr>
+    <td class="bag-show text-right"> <label>Tax (5%)</label>
+    </td>
+    <td class="bag-show">
+      <div class="totals-value" id="cart-tax">$ 3.60</div>
+    </td>
+  </tr>
+  <tr>
+    <td class="bag-show text-right"> <label>Grand Total</label>
+    </td>
+    <td class="bag-show">
+      <div class="totals-value" id="cart-total">$ @String.Format("{0:#,##0.00}",  Decimal.Divide(@ViewBag.total,100))</div>
+    </td>
+  </tr>
+  <tr>
+    <td class="bag-none"></td>
+    <td class="bag-none">
+      <button class="checkout" type="button" id="checkout-button">Checkout</button>
+    </td>
+  </tr>
+</table>
+</div>
+<script type="text/javascript">
+  // Create an instance of the Stripe object with your publishable API key
+  var stripe = Stripe("pk_test_51IyNr3Fju3dt4jIrpTncQ879ocGJ2cqkdAoXVrTsXRq4CH8NiNcL2WEm6zyjHiQuTah8EnnKXa3VehOTsJqty1iC00cHoyM1Ef");
+  var checkoutButton = document.getElementById("checkout-button");
+  checkoutButton.addEventListener("click", function () {
+    fetch("/create-checkout-session", {
+      method: "POST",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (session) {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(function (result) {
+        // If redirectToCheckout fails due to a browser or network
+        // error, you should display the localized error message to your
+        // customer using error.message.
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+      });
+  });
+</script>

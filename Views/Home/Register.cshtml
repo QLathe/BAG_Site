@@ -1,0 +1,66 @@
+@model User
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <form class="col-4" asp-action="Register" asp-controller="Home" method="post"
+            onsubmit="if(document.getElementById('agree').checked) { return true; } else { alert('Please indicate that you have read and agree to the Terms and Conditions and Privacy Policy'); return false; }">
+            <h3>Register</h3>
+            <div class="row mt-4 align-items-end">
+                <div class="background col border border-dark p-3 roundBorder">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" asp-for="DisplayName"></label>
+                        <div class="col-sm-7">
+                            <span asp-validation-for="DisplayName"></span>
+                            <input class="form-control" asp-for="DisplayName">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" asp-for="FirstName"></label>
+                        <div class="col-sm-7">
+                            <span asp-validation-for="FirstName"></span>
+                            <input class="form-control" asp-for="FirstName">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" asp-for="LastName"></label>
+                        <div class="col-sm-7">
+                            <span asp-validation-for="LastName"></span>
+                            <input class="form-control" asp-for="LastName">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" asp-for="Email"></label>
+                        <div class="col-sm-7">
+                            <span asp-validation-for="Email"></span>
+                            <input class="form-control" asp-for="Email">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" asp-for="Password"></label>
+                        <div class="col-sm-7">
+                            <span asp-validation-for="Password"></span>
+                            <input class="form-control" asp-for="Password">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" asp-for="Confirm">Confirm Password: </label>
+                        <div class="col-sm-7">
+                            <span asp-validation-for="Confirm"></span>
+                            <input class="form-control" asp-for="Confirm">
+                        </div>
+                    </div>
+                    <input type="checkbox" name="checkbox" value="check" id="agree" /> I have read and agree to the <a
+                        href="Privacy">Terms and Conditions</a> and <a href="Privacy">Privacy Policy</a>
+                    <button class="row ml-auto mr-3" type="submit">Register</button>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                    <a class="highlight darkHover" href="Login">Already have an account? click here to login</a>
+            </div>
+        </form>
+    </div>
+</div>

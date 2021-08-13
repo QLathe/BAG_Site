@@ -1,0 +1,36 @@
+@model User
+
+@{
+    ViewData["Title"] = "Login Page";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <form class="col-4" asp-action="Login" asp-controller="Home" method="POST">
+            <h3>Login</h3>
+                <div class="row mt-4 align-items-end">
+                    <div class="background col border border-dark p-3 roundBorder">
+                        <div class="form-group">
+                            <label class="col-sm-4 col-form-label" asp-for="Email"></label>
+                            <div class="col-12">
+                                <span asp-validation-for="Email"></span>
+                                <input class="form-control" asp-for="Email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-form-label" asp-for="Password"></label>
+                            <div class="col-12">
+                                <span asp-validation-for="Password"></span>
+                                <input class="form-control" asp-for="Password">
+                            </div>
+                        </div>
+                        <button class="row ml-auto mr-3" type="submit">Login</button>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a class="highlight darkHover" href="Register">Don't have an account? click here to register</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

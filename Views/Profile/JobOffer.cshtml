@@ -1,0 +1,48 @@
+@model Job
+
+@{
+    ViewData["Title"] = "Contract Offer";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <form asp-action="Offer" asp-controller="Profile" method="POST" class="col-6">
+            <h4 class="text-center text-uppercase mt-3">Job Offer For: @ViewBag.Artist.DisplayName</h4>
+            <div class="row mt-4 align-items-end">
+                <div class="background col border border-dark p-3 roundBorder">
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Title"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Title"></span>
+                            <input class="form-control" asp-for="Title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Description"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Description"></span>
+                            <textarea class="form-control" asp-for="Description"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="ArtistId" value="@ViewBag.Artist.UserId">
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Company"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Company"></span>
+                            <input class="form-control" asp-for="Company">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 col-form-label" asp-for="Pay"></label>
+                        <div class="col-12">
+                            <span asp-validation-for="Pay"></span>
+                            <input class="form-control" asp-for="Pay">
+                        </div>
+                    </div>
+                    <button class="row ml-auto mr-3" type="submit">Send Offer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

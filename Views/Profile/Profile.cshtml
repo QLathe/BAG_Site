@@ -1,0 +1,159 @@
+@model IEnumerable<models.Models.Art>
+
+@{
+    ViewData["Title"] = "Profile Page";
+}
+
+<div class="profcol1">
+    <div class="profcontainer">
+        @if (ViewBag.User.ProfilePic == null)
+        {
+            <img src="~/images/Default_Profile_Pic.png" alt="" class="Profile-Pic">
+        }
+        else
+        {
+            <img src="~/images/@ViewBag.User.ProfilePic" alt="" class="Profile-Pic">
+        }
+        <span class="highlight">
+            <h2 class="text-center">@ViewBag.User.DisplayName</h2>
+        </span>
+        <div class="stat">
+            @if (ViewBag.User.Mentor == 1)
+            {
+                <section class="status open">
+                    @* <a href="/MenStat"> *@
+                    Available to Mentor
+                    @* </a> *@
+                </section>
+            }
+            else if (ViewBag.User.Mentor == 2)
+            {
+                <section class="status open">
+                    @* <a href="/MenStat"> *@
+                    Open to be Mentored
+                    @* </a> *@
+                </section>
+            }
+            else
+            {
+                <section class="status">
+                    <a>
+                        Mentor: Closed
+                    </a>
+                </section>
+            }
+            @if (ViewBag.User.OpenForCommission == 1)
+            {
+                <section class="status open">
+                    <a href="/ComStat">
+                        Commissions: Open
+                    </a>
+                </section>
+            }
+            else
+            {
+                <section class="status">
+                    <a href="/ComStat">
+                        Commissions: Closed
+                    </a>
+                </section>
+            }
+            <a class="likes" asp-action="Upload" asp-controller="Profile">
+                <section class="status open">
+                    + Add Art
+                </section>
+            </a>
+            <a class="likes" href="JobView">
+                <section class="status open">
+                    View Job Offers
+                </section>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="profcol2">
+    <section class="scroll">
+
+        @foreach (var art in Model)
+        {
+            <div class="displayArt mt-3">
+                <div class="pro__wrap">
+                    <img class="pro__img" src="~/images/@art.ImgFile" height="100" width="100" />
+                    <div class="pro__description">
+                        <span class="highlight">
+                            <p class="creator">@art.Title</p>
+                        </span>
+                        <div class="likeIco">
+                            <p class="nom">@art.LikedBy.Count</p>
+                            @if (art.LikedBy.Any(a => a.UserId == ViewBag.LoggedUser))
+                            {
+                                <button class="btnlike mr-2" data-id="@art.ArtId" data-like="yes">
+                                    <span class="highlight">
+                                        <i class="material-icons">favorite</i>
+                                    </span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btnlike mr-2" data-id="@art.ArtId" data-like="no">
+                                    <i class="material-icons">favorite_border</i>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="whitespace"></div>
+    </section>
+</div>
+<div class="profcol3">
+    <section class="profcontainer2">
+
+        <div class="bio">
+            <h5 class="mt-3 bioFloat">
+                Bio
+                <a id="bioEdit" class="ml-auto text-right">
+                <span class="highlight rightFloat">
+                    <i id="bioEdit" class="material-icons">edit</i>
+                </span>
+                </a>
+            </h5>
+            <div id="bioInput">
+
+            <p id="myBio">
+                @ViewBag.User.Bio
+            </p>
+            </div>
+        </div>
+        <div class="info">
+            <h5>Favorite Artists</h5>
+            @foreach (var artist in ViewBag.fav)
+            {
+                
+                <li><a href="/OProfile/@artist.TargetId">@artist.Target.DisplayName</a></li>
+            }
+        </div>
+        <div class="info">
+            <h5>Followers</h5>
+            @foreach (var artist in ViewBag.fol)
+            {
+                
+                <li><a href="/OProfile/@artist.FollowerId">@artist.Follower.DisplayName</a></li>
+            }
+        </div>
+    </section>
+</div>
+@section scripts{
+<script>
+     $(document).ready(function () {
+        $("#bioEdit").click(function () {
+        $("#myBio").html("<form action='writeBio' method='POST' class='bioForm'><div class='form-group'><textarea name='Bio' rows='6' class='roundBorder'>@ViewBag.User.Bio</textarea></div><button type='submit'>Enter</button></form>");
+        });
+     });
+    $('body').css({
+        overflow: 'hidden',
+        height: '100%'
+    });
+</script>
+}

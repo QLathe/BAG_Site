@@ -1,0 +1,53 @@
+@model List<models.Models.User>
+
+@{
+    ViewData["Title"] = "Artists";
+}
+
+<h4 class="text-center text-uppercase mt-3">Artists</h4>
+<div class="index-scroll">
+    <table>
+        <tbody>
+
+    @foreach (var artist in Model)
+    {
+        if(artist.Art.Count != 0){
+
+            <tr><td><h4><a class="highlight" href="/OProfile/@artist.UserId">@artist.DisplayName</a></h4></td></tr>
+        <tr class="artistrow">
+        @foreach (var art in artist.Art)
+        {
+            <td>
+
+        <div class="img__block">
+        <div class="img__wrap">
+                <img class="img__img" src="/images/@art.ImgFile" height="100" width="100" />
+            @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;" *@
+            <div href="javascript:void(0);" class="img__description anchorDetail" data-id="@art.ArtId">
+                <p class="creator">@art.Creator.DisplayName</p>
+                <p class="artTitle">@art.Title</p>
+                <div class="likeIco">
+                    <p class="nom">@art.LikedBy.Count</p>
+                    <a class="likes" href="LikeArt/@art.ArtId">
+                        @if (art.LikedBy.Any(a => a.User == ViewBag.User))
+                        {
+                            <span class="highlight">
+                                <i class="material-icons">favorite</i>
+                            </span>
+                        }
+                        else
+                        {
+                            <i class="material-icons">favorite_border</i>
+                        }
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+            </td>
+        }
+        </tr>
+        }
+    }
+        </tbody>
+    </table>

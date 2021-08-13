@@ -1,0 +1,97 @@
+@model List<models.Models.Liked>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h3 class="text-center text-uppercase mt-3">Liked Art</h3>
+<div class="featured_art"></div>
+<div class="index-scroll">
+    @{
+        int counter = 0;
+        bool check = false;
+    }
+    @foreach (var art in Model)
+    {
+    <div class="img__block">
+        @{if(counter<9){
+                counter++;
+            } else {
+                check = true;
+            }
+            }
+        <div class="img__wrap">
+            @if(check){
+                <img class="img__img lazy" data-src="/images/@art.Art.ImgFile" height="100" width="100" />
+            } else {
+                <img class="img__img" src="/images/@art.Art.ImgFile" height="100" width="100" />
+            }
+            @* onClick="showDiv(@art, '/images/@art.ImgFile'); return false;" *@
+            <div href="javascript:void(0);" class="img__description anchorDetail" data-id="@art.ArtId">
+                <p class="creator">@art.Art.Creator.DisplayName</p>
+                <p class="artTitle">@art.Art.Title</p>
+                <div class="likeIco">
+                    <p class="nom">@art.Art.LikedBy.Count</p>
+                    <a class="likes" href="LikeArt/@art.ArtId">
+                        @if (art.Art.LikedBy.Any(a => a.User == ViewBag.User))
+                        {
+                            <span class="highlight">
+                                <i class="material-icons">favorite</i>
+                            </span>
+                        }
+                        else
+                        {
+                            <i class="material-icons">favorite_border</i>
+                        }
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    var TeamDetailPostBackURL = 'Details';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": id },
+                datatype: "json",
+                success: function (data) {
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+        //$("#closebtn").on('click',function(){  
+        //    $('#myModal').modal('hide');    
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+
+</script>
+
+}

@@ -1,0 +1,66 @@
+@model Job
+
+@{
+    ViewData["Title"] = @Model.Title;
+}
+
+<div class="container-fluid col-6">
+    <div class="background col border border-dark p-3 roundBorder">
+        <h4 class="text-center text-uppercase mt-3"><u>@Model.Title</u></h4>
+        <div class="col-12">
+            <p><b>Company:</b> @Model.Company</p>
+        </div>
+        <div class="col-12">
+            <p><b>Description:</b> @Model.Description</p>
+        </div>
+        <div class="col-12">
+            <p><b>Pay:</b> @Model.Pay</p>
+        </div>
+        <div class="sngl_flex text-center">
+            @if (Model.Status == 0)
+            {
+                <a class="likes" href="/JobView">
+                    <section class="status open">
+                        Go Back
+                    </section>
+                </a>
+                <a class="likes" href="/jobAccept/@Model.JobId">
+                    <section class="status open">
+                        Accept
+                    </section>
+                </a>
+                <a class="likes" href="/JobReject/@Model.JobId">
+                    <section class="status open">
+                        Decline
+                    </section>
+                </a>
+                <a class="likes" href="/JobInquire/@Model.JobId">
+                    <section class="status open">
+                        Inquire
+                    </section>
+                </a>
+            }
+            else if (Model.Status == 1)
+            {
+                <a class="likes" href="/JobView">
+                    <section class="status open">
+                        Go Back
+                    </section>
+                </a>
+                <a class="likes" href="/JobInquire/@Model.JobId">
+                    <section class="status open">
+                        Inquire
+                    </section>
+                </a>
+            }
+            else
+            {
+                <a class="likes" href="/pastJobs">
+                    <section class="status open">
+                        Go Back
+                    </section>
+                </a>
+            }
+        </div>
+    </div>
+</div>
